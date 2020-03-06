@@ -36,8 +36,8 @@ def FileDelete(Target, Type):
         shutil.move(WatchedFolder + '/' + Target, FileDef[Type])
 
 
-def MoveByName():
-    for File in os.listdir(WatchedFolder):
+def MoveByName(TargetDir):
+    for File in os.listdir(TargetDir):
         # MP4 Checker
         if File.endswith(".mp4"):
             print("MP4 Found")
@@ -60,6 +60,6 @@ def MoveByName():
             FileDelete(File, '.exe')
 
 
-MoveByName()
+MoveByName(WatchedFolder)
 
 print('Finished File check of ' + WatchedFolder)
