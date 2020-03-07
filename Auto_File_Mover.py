@@ -2,20 +2,21 @@ import os
 import shutil
 import fnmatch
 
-WatchedFolder = 'D:/Downloads'
+WatchedFolder = 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir'
+
 
 KeywordDef = {
-    'Wallpaper': 'D:/Google Drive/Photos/Wallpapers',
-    'specific video': 'D:/Google Drive/Video/VideoTest'
+    'Wallpaper': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Wallpapers',
+    'specific video': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Video/VideoTest'
 }
 
 FileTypeDef = {
-    '.docx': 'D:/Downloads/Documents',
-    '.mp4': 'D:/Downloads/Video',
-    '.png': 'D:/Downloads/Images',
-    '.jpg': 'D:/Downloads/Images',
-    '.txt': 'D:/Downloads/Documents',
-    '.exe': 'D:/Downloads/Installers'
+    '.docx': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Documents',
+    '.mp4': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Video',
+    '.png': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Images',
+    '.jpg': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Images',
+    '.txt': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Documents',
+    '.exe': 'C:/Users/relli/Documents/PythonScripts/Auto-File-Mover/testDir/Installers'
 }
 
 
@@ -45,13 +46,16 @@ def MoveByName(TargetDir):
         for FileType in FileTypeDef:
             if File.endswith(FileType):
                 print(File + " Found.")
+                messageText='Specific ' + FileType + ' not found. Moving file named ' + File + ' to default folder.'
+                destinationText=FileTypeDef[FileType]
                 for keyword in KeywordDef:
                     if fnmatch.fnmatch(File, '*' + keyword + '*'):
-                        print(keyword + ' Found named ' + File)
-                        FileMove(File, KeywordDef[keyword])
-                    else:
-                        print('Specific ' + FileType + ' not found. Moving file named ' + File + ' to default folder.')
-                        FileMove(File, FileTypeDef[FileType])
+                        messageText=keyword + ' Found named ' + File
+                        destinationText=KeywordDef[keyword]
+                print(messageText)
+                FileMove(File,destinationText)
+            else:
+                print("No match")
 
 
 MoveByName(WatchedFolder)
