@@ -54,8 +54,7 @@ def MoveByName(TargetDir):
                         destinationText=KeywordDef[keyword]
                 print(messageText)
                 FileMove(File,destinationText)
-            else:
-                print("No match")
+
 
 
 MoveByName(WatchedFolder)
