@@ -4,62 +4,56 @@ import fnmatch
 
 WatchedFolder = 'D:/Downloads'
 
-Settings = {
-    'Monitor Resolution': '2560, 1440'
+KeywordDef = {
+    'Wallpaper': 'D:/Google Drive/Photos/Wallpapers',
+    'specific video': 'D:/Google Drive/Video/VideoTest'
 }
 
-PathDef = {
-    'Wallpapers': 'D:/Google Drive/Photos/Wallpapers'
-}
-
-FileDef = {
+FileTypeDef = {
+    '.docx': 'D:/Downloads/Documents',
     '.mp4': 'D:/Downloads/Video',
     '.png': 'D:/Downloads/Images',
     '.jpg': 'D:/Downloads/Images',
+    '.txt': 'D:/Downloads/Documents',
     '.exe': 'D:/Downloads/Installers'
 }
 
 
 def FileMove(Target, Dest):
+    if os.path.isdir(Dest) is True:
+        pass
+    else:
+        os.mkdir(Dest)
     shutil.move(WatchedFolder + '/' + Target, Dest)
-    print('Copied to Folder')
+    print('Move Complete.')
 
 
+#  todo reincorporate into MoveByName Function.
 def FileDelete(Target, Type):
     print('Found an ' + Type + ' named ' + Target + '.')
     InstallerDelResp = input('Do you want to delete it?')
     if InstallerDelResp == 'yes' or InstallerDelResp == 'y':
         os.remove(WatchedFolder + '/' + Target)
-        print('Deleted File')
+        print('Deleted File.')
     else:
         print('Ok, copying ' + Target + 'to the ' + Type + ' default folder.')
-        shutil.move(WatchedFolder + '/' + Target, FileDef[Type])
+        shutil.move(WatchedFolder + '/' + Target, FileTypeDef[Type])
 
 
 def MoveByName(TargetDir):
     for File in os.listdir(TargetDir):
-        # MP4 Checker
-        if File.endswith(".mp4"):
-            print("MP4 Found")
-            if fnmatch.fnmatch(File, '*Test*'):
-                print('Test Example Found named ' + File)
-                FileMove(File, FileDef['.mp4'])
-            else:
-                print('Specific .mp4 not found. Moving file named ' + File + ' to default folder.')
-                FileMove(File, FileDef['.mp4'])
-        # .png Checker
-        elif File.endswith(".png"):
-            print("PNG Found")
-            FileMove(File, FileDef['.png'])
-        # .jpg Checker
-        elif File.endswith(".jpg"):
-            print("jpg Found")
-            FileMove(File, FileDef['.jpg'])
-        # Installer/.exe Checker
-        elif File.endswith(".exe"):
-            FileDelete(File, '.exe')
+        for FileType in FileTypeDef:
+            if File.endswith(FileType):
+                print(File + " Found.")
+                for keyword in KeywordDef:
+                    if fnmatch.fnmatch(File, '*' + keyword + '*'):
+                        print(keyword + ' Found named ' + File)
+                        FileMove(File, KeywordDef[keyword])
+                    else:
+                        print('Specific ' + FileType + ' not found. Moving file named ' + File + ' to default folder.')
+                        FileMove(File, FileTypeDef[FileType])
 
 
 MoveByName(WatchedFolder)
 
-print('Finished File check of ' + WatchedFolder)
+print('Finished File check of ' + WatchedFolder + '.')
